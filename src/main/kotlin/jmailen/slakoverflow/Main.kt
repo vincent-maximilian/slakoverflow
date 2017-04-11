@@ -1,12 +1,19 @@
 package jmailen.slakoverflow
 
 import com.steamstreet.krest.get
+import jmailen.slakoverflow.serialization.Json
 import org.jetbrains.ktor.application.ApplicationCall
 import org.jetbrains.ktor.application.call
 import org.jetbrains.ktor.host.embeddedServer
 import org.jetbrains.ktor.netty.Netty
+import org.jetbrains.ktor.request.MultiPartData
+import org.jetbrains.ktor.request.PartData
+import org.jetbrains.ktor.request.RequestContent
+import org.jetbrains.ktor.request.contentType
 import org.jetbrains.ktor.routing.get
+import org.jetbrains.ktor.routing.post
 import org.jetbrains.ktor.routing.routing
+import org.jetbrains.ktor.util.ValuesMap
 import java.net.URI
 
 fun main(args: Array<String>) {
@@ -15,6 +22,9 @@ fun main(args: Array<String>) {
             get("/") {
                 handleRoot(call)
             }
+            post("/slack/command/overflow") {
+                handleCommandOverflow(call)
+            }
         }
     }
     server.start(wait = true)
@@ -22,7 +32,13 @@ fun main(args: Array<String>) {
 
 suspend fun handleRoot(call: ApplicationCall) {
     val response = URI("https://api.stackexchange.com/2.2/info?site=stackoverflow").get {}.response<SiteInfo>()
-    call.respond("ok overflow site: ${response.body}")
+    // val ret = Json.write(response.body)
+    call.respond(response.body.toString())
+}
+
+suspend fun handleCommandOverflow(call: ApplicationCall) {
+    val form = call.request.receive(ValuesMap::class)
+    call.respond("ok then: ${form["user_name"]}")
 }
 
 data class SiteInfo(val items: ArrayList<SiteInfoItem>, val quota_max: Int, val quota_remaining: Int, val has_more: Boolean)

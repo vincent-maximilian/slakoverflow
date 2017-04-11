@@ -3,6 +3,7 @@ package jmailen.slakoverflow
 import com.steamstreet.krest.get
 import jmailen.slakoverflow.serialization.Json
 import jmailen.slakoverflow.slack.CommandResponse
+import jmailen.slakoverflow.slack.ResponseType
 import jmailen.slakoverflow.stackoverflow.SiteInfo
 import org.jetbrains.ktor.application.ApplicationCall
 import org.jetbrains.ktor.application.call
@@ -44,7 +45,7 @@ suspend fun handleCommandOverflow(call: ApplicationCall) {
 
     logger.info("{} called by {}", call.request.uri, form["user_name"])
 
-    val response = CommandResponse("in_channel", "ok then: ${form["user_name"]} you said ${form["text"]}")
+    val response = CommandResponse("ok then: ${form["user_name"]} you said ${form["text"]}", ResponseType.in_channel)
     call.respond(jsonResponse(response))
 }
 

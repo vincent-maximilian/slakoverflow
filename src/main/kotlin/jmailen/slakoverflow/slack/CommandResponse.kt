@@ -1,10 +1,12 @@
 package jmailen.slakoverflow.slack
 
-data class CommandResponse(val text: String, val response_type: ResponseType = ResponseType.ephemeral) {
-    val attachments: MutableList<CommandResponseAttachment> = mutableListOf()
+data class CommandResponse(
+        val text: String,
+        val response_type: ResponseType = ResponseType.ephemeral,
+        val attachments: MutableList<CommandResponseAttachment> = mutableListOf()) {
 
-    init {
-        attachments += CommandResponseAttachment(text)
+    fun attach(content: String) {
+        attachments += CommandResponseAttachment(content)
     }
 }
 

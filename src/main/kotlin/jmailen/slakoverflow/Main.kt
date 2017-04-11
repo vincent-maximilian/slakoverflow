@@ -45,7 +45,8 @@ suspend fun handleCommandOverflow(call: ApplicationCall) {
 
     logger.info("{} called by {}", call.request.uri, form["user_name"])
 
-    val response = CommandResponse("ok then: ${form["user_name"]} you said ${form["text"]}", ResponseType.in_channel)
+    val response = CommandResponse("ok ${form["user_name"]}", ResponseType.in_channel)
+    response.attach("you said: ${form["text"]}")
     call.respond(jsonResponse(response))
 }
 

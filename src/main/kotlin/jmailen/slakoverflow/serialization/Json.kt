@@ -13,5 +13,5 @@ object Json {
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL) // skip keys with null values
     }
 
-    fun write(obj: Any) = mapper.writeValueAsBytes(obj)
+    fun write(obj: Any) = mapper.writeValueAsString(obj)
 }

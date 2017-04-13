@@ -38,7 +38,7 @@ class ApiCallTest {
 
     @Test
     fun testParamUrlEncoding() {
-        call = call.withPath("path").withParam(""" n&m= """, """ultimate "funtime"?""")
+        call = call.withPath("/path").withParam(""" n&m= """, """ultimate "funtime"?""")
         assertThat(callUri(), isUriEndingIn("/path?+n%26m%3D+=ultimate+%22funtime%22%3F"))
     }
 

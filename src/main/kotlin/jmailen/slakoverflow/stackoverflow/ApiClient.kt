@@ -1,17 +1,28 @@
 package jmailen.slakoverflow.stackoverflow
 
 import com.steamstreet.krest.get
+import org.slf4j.LoggerFactory
 import java.net.URI
 import java.net.URLEncoder
 
 class ApiClient {
+    companion object {
+        val logger = LoggerFactory.getLogger(ApiClient::class.java)
+    }
+
     fun siteInfo(): SiteInfo {
         val u = overflowCall("/info").uri()
+        logger.info("siteInfo: $u")
         return u.get {}.response<SiteInfo>().body
     }
 
-    fun excerptSearch(freeText: String): String {
-        return ""
+    fun excerptSearch(freeText: String): AnyJson {
+        val u = overflowCall("/search/excerpts")
+                .withParam("order", "desc")
+                .withParam("sort", "votes")
+                .withParam("q", freeText).uri()
+        logger.info("excerptSearch: $u")
+        return u.get {}.response<AnyJson>().body
     }
 
     private fun overflowCall(path: String) =
@@ -46,3 +57,5 @@ class ApiCall {
 }
 
 fun String.urlEncode() = URLEncoder.encode(this, "UTF-8")
+
+typealias AnyJson = Map<String, Any>

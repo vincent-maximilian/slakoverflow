@@ -21,3 +21,10 @@ dependencies {
 }
 
 mainClassName = 'jmailen.slakoverflow.MainKt'
+
+test {
+    testLogging {
+        exceptionFormat 'full'
+        stackTraceFilters 'entry_point'
+    }
+}

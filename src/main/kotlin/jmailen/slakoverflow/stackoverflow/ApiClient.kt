@@ -24,7 +24,7 @@ class ApiCall {
     }
 
     var path = ""
-    var params = mutableMapOf<String, String>()
+    var params = LinkedHashMap<String, String>()
 
     fun withPath(p: String): ApiCall {
         path = p

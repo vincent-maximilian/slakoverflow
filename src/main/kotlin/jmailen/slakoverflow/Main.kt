@@ -4,6 +4,7 @@ import com.steamstreet.krest.get
 import jmailen.slakoverflow.serialization.Json
 import jmailen.slakoverflow.slack.CommandResponse
 import jmailen.slakoverflow.slack.ResponseType
+import jmailen.slakoverflow.stackoverflow.ApiClient
 import jmailen.slakoverflow.stackoverflow.SiteInfo
 import org.jetbrains.ktor.application.ApplicationCall
 import org.jetbrains.ktor.application.call
@@ -36,8 +37,8 @@ fun main(args: Array<String>) {
 }
 
 suspend fun handleRoot(call: ApplicationCall) {
-    val response = URI("https://api.stackexchange.com/2.2/info?site=stackoverflow").get {}.response<SiteInfo>()
-    call.respond(jsonResponse(response.body))
+    val siteInfo = ApiClient().siteInfo()
+    call.respond(jsonResponse(siteInfo))
 }
 
 suspend fun handleCommandOverflow(call: ApplicationCall) {

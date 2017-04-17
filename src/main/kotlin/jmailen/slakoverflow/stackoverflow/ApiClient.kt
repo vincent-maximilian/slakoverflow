@@ -11,35 +11,32 @@ class ApiClient {
     }
 
     fun siteInfo(): SiteInfo {
-        val u = overflowCall("/info").uri()
+        val u = ApiCall("/info").uri()
         logger.info("siteInfo: $u")
-        return u.get {}.response<SiteInfo>().body
+        return u.get().response<SiteInfo>().body
     }
 
     fun excerptSearch(freeText: String): AnyJson {
-        val u = overflowCall("/search/excerpts")
+        val u = ApiCall("/search/excerpts")
                 .withParam("order", "desc")
                 .withParam("sort", "votes")
                 .withParam("q", freeText).uri()
         logger.info("excerptSearch: $u")
         return u.get {}.response<AnyJson>().body
     }
-
-    private fun overflowCall(path: String) =
-            ApiCall().withPath(path).withParam("site", "stackoverflow")
 }
 
-class ApiCall {
+class ApiCall(val path: String = "", site: String = ApiCall.STACKOVERFLOW_SITE) {
+
     companion object {
         const val API_ROOT = "https://api.stackexchange.com/2.2"
+        const val STACKOVERFLOW_SITE = "stackoverflow"
     }
 
-    var path = ""
     var params = LinkedHashMap<String, String>()
 
-    fun withPath(p: String): ApiCall {
-        path = p
-        return this
+    init {
+        params.set("site", site)
     }
 
     fun withParam(name: String, value: String): ApiCall {
@@ -52,7 +49,9 @@ class ApiCall {
     private fun paramsString() =
             when (params.isEmpty()) {
                 true -> ""
-                false -> "?" + params.map { "${it.key.urlEncode()}=${it.value.urlEncode()}" }.joinToString("&")
+                false -> "?" + params.map {
+                    "${it.key.urlEncode()}=${it.value.urlEncode()}"
+                }.joinToString("&")
             }
 }
 

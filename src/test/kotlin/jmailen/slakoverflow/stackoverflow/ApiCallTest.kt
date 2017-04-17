@@ -1,48 +1,41 @@
 package jmailen.slakoverflow.stackoverflow
 
-import org.hamcrest.CoreMatchers.*
-import org.junit.Assert.*
-import org.junit.Before
+import org.hamcrest.CoreMatchers.equalTo
+import org.junit.Assert.assertThat
 import org.junit.Test
 
 class ApiCallTest {
-    lateinit var call: ApiCall
-
-    @Before
-    fun setup() {
-        call = ApiCall()
-    }
 
     @Test
     fun testRoot() {
-        assertThat(callUri(), isUriEndingIn())
+        assertThat(ApiCall().uriStr(), isUriEndingIn("?site=stackoverflow"))
     }
 
     @Test
     fun testPath() {
-        call = call.withPath("/some/path")
-        assertThat(callUri(), isUriEndingIn("/some/path"))
+        val call = ApiCall("/some/path", "a")
+        assertThat(call.uriStr(), isUriEndingIn("/some/path?site=a"))
     }
 
     @Test
     fun testOneParam() {
-        call = call.withPath("/path").withParam("name", "value")
-        assertThat(callUri(), isUriEndingIn("/path?name=value"))
+        val call = ApiCall("/path").withParam("name", "value")
+        assertThat(call.uriStr(), isUriEndingIn("/path?site=stackoverflow&name=value"))
     }
 
     @Test
     fun testMultipleParams() {
-        call = call.withPath("/path").withParam("p1", "v1").withParam("p2", "v2")
-        assertThat(callUri(), isUriEndingIn("/path?p1=v1&p2=v2"))
+        val call = ApiCall("/path", "a").withParam("p1", "v1").withParam("p2", "v2")
+        assertThat(call.uriStr(), isUriEndingIn("/path?site=a&p1=v1&p2=v2"))
     }
 
     @Test
     fun testParamUrlEncoding() {
-        call = call.withPath("/path").withParam(""" n&m= """, """ultimate "funtime"?""")
-        assertThat(callUri(), isUriEndingIn("/path?+n%26m%3D+=ultimate+%22funtime%22%3F"))
+        val call = ApiCall("/path", "a").withParam(""" n&m= """, """ultimate "funtime"?""")
+        assertThat(call.uriStr(), isUriEndingIn("/path?site=a&+n%26m%3D+=ultimate+%22funtime%22%3F"))
     }
-
-    fun callUri() = call.uri().toString()
 
     fun isUriEndingIn(end: String = "") = equalTo(ApiCall.API_ROOT + end)
 }
+
+fun ApiCall.uriStr() = this.uri().toString()

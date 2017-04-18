@@ -10,19 +10,19 @@ class ApiClient {
         val logger = LoggerFactory.getLogger(ApiClient::class.java)
     }
 
-    fun siteInfo(): SiteInfo {
+    fun siteInfo(): List<SiteInfo> {
         val u = ApiCall("/info").uri()
         logger.info("siteInfo: $u")
-        return u.get().response<SiteInfo>().body
+        return u.get().response<SiteInfos>().body.items
     }
 
-    fun excerptSearch(freeText: String): AnyJson {
+    fun excerptSearch(freeText: String): List<SearchExcerpt> {
         val u = ApiCall("/search/excerpts")
                 .withParam("order", "desc")
                 .withParam("sort", "votes")
                 .withParam("q", freeText).uri()
         logger.info("excerptSearch: $u")
-        return u.get {}.response<AnyJson>().body
+        return u.get {}.response<SearchExcerpts>().body.items
     }
 }
 

@@ -3,6 +3,7 @@ package jmailen.slakoverflow
 import jmailen.slakoverflow.serialization.Json
 import jmailen.slakoverflow.slack.CommandResponse
 import jmailen.slakoverflow.slack.ResponseType
+import jmailen.slakoverflow.stackoverflow.Answer
 import jmailen.slakoverflow.stackoverflow.ApiClient
 import jmailen.slakoverflow.stackoverflow.SearchExcerpt
 import jmailen.slakoverflow.stackoverflow.SearchResultType
@@ -43,16 +44,17 @@ suspend fun handleRoot(call: ApplicationCall) {
 suspend fun handleCommandOverflow(call: ApplicationCall) {
     val form = call.request.receive(ValuesMap::class)
     val user = form["user_name"] ?: "you"
-    val question = form["text"]
+    val query = form["text"]
 
     logger.info("{} called by {}", call.request.uri, user)
 
     var response: CommandResponse
-    if (question != null && question.trim() != "") {
-        val answer = bestSearchResult(question)
+    if (query != null && query.trim() != "") {
+        val question = bestQuestion(query)
 
-        if (answer != null) {
-            response = answerResponse(user, answer)
+        if (question != null) {
+            val answer = bestAnswer(question.question_id)
+            response = answerResponse(user, question, answer)
         } else {
             response = CommandResponse("ok $user, sorry no one has answered that question!", ResponseType.in_channel)
         }
@@ -62,21 +64,31 @@ suspend fun handleCommandOverflow(call: ApplicationCall) {
     call.respond(jsonResponse(response))
 }
 
-fun bestSearchResult(query: String) =
+fun bestQuestion(query: String) =
         ApiClient().excerptSearch(query)
-            .filter { it.item_type == SearchResultType.answer && it.is_accepted }
+            .filter { it.item_type == SearchResultType.question && it.is_answered }
             .sortedBy { it.score * 10 + it.question_score }
             .lastOrNull()
 
-fun answerResponse(user: String, answer: SearchExcerpt): CommandResponse {
-    val response = CommandResponse("ok $user, found answer to:"
-            + " <http://stackoverflow.com/questions/${answer.question_id}|*${answer.title}*>"
-            + " with ${answer.score} votes.", ResponseType.in_channel)
-    response.attach("${answer.body}\n...\n${answer.excerpt}")
-    return response
+fun bestAnswer(questionId: Int) = ApiClient().answers(questionId).first()
+
+fun answerResponse(user: String, question: SearchExcerpt, answer: Answer): CommandResponse {
+    var text = "ok $user, found answer to:" +
+            " <http://stackoverflow.com/questions/${question.question_id}|*${question.title}*>" +
+            " with ${question.score} votes.\n>>>"
+    text += "*Q:*\n${question.body.limit(500)}\n\n" +
+            "*A:*\nhttp://stackoverflow.com/a/${answer.answer_id}"
+    return CommandResponse(text, ResponseType.in_channel)
 }
 
 fun jsonResponse(obj: Any): TextContent {
     val objSer = Json.write(obj)
     return TextContent(objSer, ContentType.Application.Json)
+}
+
+fun String.limit(size: Int): String {
+    return when (this.length > size) {
+        true -> this.subSequence(0, size).toString() + "..."
+        false -> this
+    }
 }

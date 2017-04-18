@@ -1,6 +1,7 @@
 package jmailen.slakoverflow.stackoverflow
 
-data class SiteInfos(val items: ArrayList<SiteInfo>, val quota_max: Int, val quota_remaining: Int, val has_more: Boolean)
+class SiteInfos(items: ArrayList<SiteInfo>, quota_max: Int, quota_remaining: Int, has_more: Boolean):
+        ApiResponse<SiteInfo>(items, quota_max, quota_remaining, has_more)
 
 data class SiteInfo(val new_active_users: Int,
                     val total_users: Int,

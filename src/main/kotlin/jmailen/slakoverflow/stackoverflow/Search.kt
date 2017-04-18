@@ -2,7 +2,8 @@ package jmailen.slakoverflow.stackoverflow
 
 import java.util.*
 
-data class SearchExcerpts(val items: ArrayList<SearchExcerpt>, val quota_max: Int, val quota_remaining: Int, val has_more: Boolean)
+class SearchExcerpts(items: ArrayList<SearchExcerpt>, quota_max: Int, quota_remaining: Int, has_more: Boolean):
+        ApiResponse<SearchExcerpt>(items, quota_max, quota_remaining, has_more)
 
 data class SearchExcerpt(val question_score: Int,
                          val is_accepted: Boolean,

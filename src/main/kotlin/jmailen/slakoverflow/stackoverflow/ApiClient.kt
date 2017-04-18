@@ -22,7 +22,7 @@ class ApiClient {
                 .withParam("sort", "votes")
                 .withParam("q", freeText).uri()
         logger.info("excerptSearch: $u")
-        return u.get {}.response<SearchExcerpts>().body.items
+        return u.get().response<SearchExcerpts>().body.items
     }
 }
 

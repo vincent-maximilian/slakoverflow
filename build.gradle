@@ -17,7 +17,9 @@ dependencies {
     compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.8.8'
     compile 'com.steamstreet:krest:0.1.2'
     compile 'org.slf4j:slf4j-simple:1.7.24'
-    testCompile 'junit:junit:4.12'
+    testCompile 'org.jetbrains.spek:spek-junit-platform-engine:1.1.0'
+    testCompile 'org.junit.platform:junit-platform-runner:1.0.0-M3'
+    testCompile 'org.amshove.kluent:kluent:1.19'
 }
 
 mainClassName = 'jmailen.slakoverflow.MainKt'

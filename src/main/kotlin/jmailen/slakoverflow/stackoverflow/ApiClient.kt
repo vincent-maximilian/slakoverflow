@@ -1,9 +1,9 @@
 package jmailen.slakoverflow.stackoverflow
 
 import com.steamstreet.krest.get
+import jmailen.java.urlEncode
 import org.slf4j.LoggerFactory
 import java.net.URI
-import java.net.URLEncoder
 
 class ApiClient {
     companion object {
@@ -62,7 +62,5 @@ class ApiCall(val path: String = "", site: String = ApiCall.STACKOVERFLOW_SITE) 
                 }.joinToString("&")
             }
 }
-
-fun String.urlEncode() = URLEncoder.encode(this, "UTF-8")
 
 typealias AnyJson = Map<String, Any>

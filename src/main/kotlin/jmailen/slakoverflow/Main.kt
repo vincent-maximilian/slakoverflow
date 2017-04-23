@@ -1,5 +1,6 @@
 package jmailen.slakoverflow
 
+import jmailen.java.limit
 import jmailen.slakoverflow.serialization.Json
 import jmailen.slakoverflow.slack.CommandResponse
 import jmailen.slakoverflow.slack.ResponseType
@@ -84,11 +85,4 @@ fun answerResponse(user: String, question: SearchExcerpt, answer: Answer): Comma
 fun jsonResponse(obj: Any): TextContent {
     val objSer = Json.write(obj)
     return TextContent(objSer, ContentType.Application.Json)
-}
-
-fun String.limit(size: Int): String {
-    return when (this.length > size) {
-        true -> this.subSequence(0, size).toString() + "..."
-        false -> this
-    }
 }

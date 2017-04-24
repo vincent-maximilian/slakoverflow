@@ -10,7 +10,6 @@ import org.junit.runner.RunWith
 @RunWith(JUnitPlatform::class)
 class ExtensionsTest : Spek({
 
-
     describe("String limit") {
 
         class tc(val label: String, val subject: String, val limit: Int, val expected: String)

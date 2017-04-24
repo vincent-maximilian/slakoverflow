@@ -1,41 +1,35 @@
 package jmailen.slakoverflow.stackoverflow
 
-import org.hamcrest.CoreMatchers.equalTo
-import org.junit.Assert.assertThat
-import org.junit.Test
+import org.jetbrains.spek.api.Spek
+import org.junit.Assert.assertEquals
+import org.junit.platform.runner.JUnitPlatform
+import org.junit.runner.RunWith
 
-class ApiCallTest {
+@RunWith(JUnitPlatform::class)
+class ApiCallTest : Spek({
 
-    @Test
-    fun testRoot() {
-        assertThat(ApiCall().uriStr(), isUriEndingIn("?site=stackoverflow"))
+    test("root") {
+        ApiCall() `has uri ending in` "?site=stackoverflow"
     }
 
-    @Test
-    fun testPath() {
-        val call = ApiCall("/some/path", "a")
-        assertThat(call.uriStr(), isUriEndingIn("/some/path?site=a"))
+    test("path") {
+        ApiCall("/some/path", "a") `has uri ending in` "/some/path?site=a"
     }
 
-    @Test
-    fun testOneParam() {
-        val call = ApiCall("/path").withParam("name", "value")
-        assertThat(call.uriStr(), isUriEndingIn("/path?site=stackoverflow&name=value"))
+    test("one param") {
+        ApiCall("/path").withParam("name", "value") `has uri ending in` "/path?site=stackoverflow&name=value"
     }
 
-    @Test
-    fun testMultipleParams() {
+    test("multiple params") {
         val call = ApiCall("/path", "a").withParam("p1", "v1").withParam("p2", "v2")
-        assertThat(call.uriStr(), isUriEndingIn("/path?site=a&p1=v1&p2=v2"))
+        call `has uri ending in` "/path?site=a&p1=v1&p2=v2"
     }
 
-    @Test
-    fun testParamUrlEncoding() {
+    test("param url encoding") {
         val call = ApiCall("/path", "a").withParam(""" n&m= """, """ultimate "funtime"?""")
-        assertThat(call.uriStr(), isUriEndingIn("/path?site=a&+n%26m%3D+=ultimate+%22funtime%22%3F"))
+        call `has uri ending in` "/path?site=a&+n%26m%3D+=ultimate+%22funtime%22%3F"
     }
+})
 
-    fun isUriEndingIn(end: String = "") = equalTo(ApiCall.API_ROOT + end)
-}
-
-fun ApiCall.uriStr() = this.uri().toString()
+infix fun ApiCall.`has uri ending in`(end: String) =
+        assertEquals(this.uri().toString(), ApiCall.API_ROOT + end)

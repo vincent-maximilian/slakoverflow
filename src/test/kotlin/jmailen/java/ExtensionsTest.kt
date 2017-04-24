@@ -10,19 +10,21 @@ import org.junit.runner.RunWith
 @RunWith(JUnitPlatform::class)
 class ExtensionsTest : Spek({
 
+
     describe("String limit") {
 
-        it("keeps short strings") {
-            "Hi!".limit(5) `should equal` "Hi!"
-        }
+        class tc(val label: String, val subject: String, val limit: Int, val expected: String)
 
-        it("keeps strings at the limit") {
-            "Cool.".limit(5) `should equal` "Cool."
-        }
+        arrayOf(tc(label = "keeps short strings",           subject = "Hi!",                 limit = 5, expected = "Hi!"),
+                tc(label = "keeps strings at the limit",    subject = "Cool.",               limit = 5, expected = "Cool."),
+                tc(label = "truncates long strings",        subject = "A really long thing", limit = 5, expected = "A rea..."),
+                tc(label = "truncates all with zero limit", subject = "Something",           limit = 0, expected = "...")
+        ).forEach { with(it) {
 
-        it("truncates long strings") {
-            "A really long thing".limit(5) `should equal` "A rea..."
-        }
+            it(label) {
+                subject.limit(limit) `should equal` expected
+            }
+        }}
     }
 
     describe("String urlEncode") {

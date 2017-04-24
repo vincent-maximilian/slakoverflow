@@ -24,6 +24,8 @@ dependencies {
 
 mainClassName = 'jmailen.slakoverflow.MainKt'
 
+kotlin.experimental.coroutines 'enable'
+
 test {
     testLogging {
         exceptionFormat 'full'

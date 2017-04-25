@@ -62,5 +62,3 @@ class ApiCall(val path: String = "", site: String = ApiCall.STACKOVERFLOW_SITE) 
                 }.joinToString("&")
             }
 }
-
-typealias AnyJson = Map<String, Any>

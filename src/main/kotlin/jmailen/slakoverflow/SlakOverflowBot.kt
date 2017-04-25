@@ -11,12 +11,12 @@ import jmailen.slakoverflow.stackoverflow.SearchResultType
 class SlakOverflowBot(val overflowApi: ApiClient) {
 
     fun answerQuestion(user: String, question: String): CommandResponse {
-        if (question != null && question.trim() != "") {
-            val question = bestQuestion(question)
+        if (question.trim() != "") {
+            val result = bestQuestion(question)
 
-            if (question != null) {
-                val answer = bestAnswer(question.question_id)
-                return answerResponse(user, question, answer)
+            if (result != null) {
+                val answer = bestAnswer(result.question_id)
+                return answerResponse(user, result, answer)
             } else {
                 return CommandResponse("ok $user, sorry no one has answered that question!", ResponseType.in_channel)
             }

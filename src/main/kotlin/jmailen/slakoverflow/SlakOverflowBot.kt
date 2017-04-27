@@ -3,10 +3,7 @@ package jmailen.slakoverflow
 import jmailen.java.limit
 import jmailen.slakoverflow.slack.CommandResponse
 import jmailen.slakoverflow.slack.ResponseType
-import jmailen.slakoverflow.stackoverflow.Answer
-import jmailen.slakoverflow.stackoverflow.ApiClient
-import jmailen.slakoverflow.stackoverflow.SearchResultExcerpt
-import jmailen.slakoverflow.stackoverflow.SearchResultType
+import jmailen.slakoverflow.stackoverflow.*
 
 class SlakOverflowBot(val overflowApi: ApiClient) {
 
@@ -34,11 +31,14 @@ class SlakOverflowBot(val overflowApi: ApiClient) {
     private fun bestAnswer(questionId: Int) = overflowApi.answers(questionId).first()
 
     private fun answerResponse(user: String, question: SearchResultExcerpt, answer: Answer): CommandResponse {
-        var text = "ok $user, found *<http://stackoverflow.com/questions/${question.question_id}|Question>" +
-                " (${question.score} votes)*:" +
-                " *${question.title}*"
-        text += "\n>>>\n${question.excerpt.limit(1000)}\n\n"
-        text += "*<http://stackoverflow.com/a/${answer.answer_id}|Answer> (${answer.score} votes):*\n"
+        val page = QuestionPage(question.question_id)
+
+        var text = "ok $user, found *<${page.url()}|${question.title}> (${question.score} votes)*:\n"
+        text += ">>>\n${page.questionPostHtml().limit(1000)}\n\n"
+
+        text += "*<${page.answerUrl(answer.answer_id)}|Answer> (${answer.score} votes):*\n"
+        text += "\n${page.answerPostHtml(answer.answer_id).limit(1000)}\n\n"
+
         return CommandResponse(text, ResponseType.in_channel)
     }
 }

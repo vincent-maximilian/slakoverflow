@@ -5,7 +5,7 @@ import jmailen.slakoverflow.slack.CommandResponse
 import jmailen.slakoverflow.slack.ResponseType
 import jmailen.slakoverflow.stackoverflow.Answer
 import jmailen.slakoverflow.stackoverflow.ApiClient
-import jmailen.slakoverflow.stackoverflow.SearchExcerpt
+import jmailen.slakoverflow.stackoverflow.SearchResultExcerpt
 import jmailen.slakoverflow.stackoverflow.SearchResultType
 
 class SlakOverflowBot(val overflowApi: ApiClient) {
@@ -33,7 +33,7 @@ class SlakOverflowBot(val overflowApi: ApiClient) {
 
     private fun bestAnswer(questionId: Int) = overflowApi.answers(questionId).first()
 
-    private fun answerResponse(user: String, question: SearchExcerpt, answer: Answer): CommandResponse {
+    private fun answerResponse(user: String, question: SearchResultExcerpt, answer: Answer): CommandResponse {
         var text = "ok $user, found *<http://stackoverflow.com/questions/${question.question_id}|Question>" +
                 " (${question.score} votes)*:" +
                 " *${question.title}*"

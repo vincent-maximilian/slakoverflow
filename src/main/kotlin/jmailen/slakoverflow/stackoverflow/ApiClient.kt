@@ -16,13 +16,13 @@ class ApiClient {
         return u.get().response<SiteInfos>().body.items
     }
 
-    fun excerptSearch(freeText: String): List<SearchExcerpt> {
+    fun excerptSearch(freeText: String): List<SearchResultExcerpt> {
         val u = ApiCall("/search/excerpts")
                 .withParam("order", "desc")
                 .withParam("sort", "relevance")
                 .withParam("q", freeText).uri()
         logger.info("excerptSearch: $u")
-        return u.get().response<SearchExcerpts>().body.items
+        return u.get().response<SearchResults>().body.items
     }
 
     fun answers(questionId: Int): List<Answer> {

@@ -3,7 +3,7 @@ package jmailen.slakoverflow
 import jmailen.slakoverflow.slack.ResponseType
 import jmailen.slakoverflow.stackoverflow.Answer
 import jmailen.slakoverflow.stackoverflow.ApiClient
-import jmailen.slakoverflow.stackoverflow.SearchExcerpt
+import jmailen.slakoverflow.stackoverflow.SearchResultExcerpt
 import jmailen.slakoverflow.stackoverflow.SearchResultType
 import org.amshove.kluent.*
 import org.jetbrains.spek.api.Spek
@@ -34,7 +34,7 @@ class SlakOverflowBotTest : Spek({
 
         given("no results for question") {
             val question = "will I ever give you up?"
-            When calling apiMock.excerptSearch(question) `it returns` listOf<SearchExcerpt>()
+            When calling apiMock.excerptSearch(question) `it returns` listOf<SearchResultExcerpt>()
             val result = subject.answerQuestion("astley", question)
 
             it("responds by saying no one has answered") {
@@ -48,9 +48,9 @@ class SlakOverflowBotTest : Spek({
 
         given("a set of question results") {
             When calling apiMock.excerptSearch(any()) `it returns`
-                    listOf(SearchExcerpt(1, SearchResultType.question, 2, 2, true, true, "Why 1", "Don't know why", "why why why"),
-                            SearchExcerpt(2, SearchResultType.question, 5, 5, true, true, "Why 2", "Maybe why", "that's why"),
-                            SearchExcerpt(3, SearchResultType.question, 10, 10, false, false, "Why 3", "You don't know", "whatever"))
+                    listOf(SearchResultExcerpt(1, SearchResultType.question, 2, 2, true, true, "Why 1", "Don't know why", "why why why"),
+                            SearchResultExcerpt(2, SearchResultType.question, 5, 5, true, true, "Why 2", "Maybe why", "that's why"),
+                            SearchResultExcerpt(3, SearchResultType.question, 10, 10, false, false, "Why 3", "You don't know", "whatever"))
             When calling apiMock.answers(2) `it returns`
                     listOf(Answer(47, true, 10), Answer(30, false, 5))
             val result = subject.answerQuestion("kenny", "did you carelessly whisper?")

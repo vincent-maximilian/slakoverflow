@@ -1,10 +1,10 @@
 plugins {
-    id "org.jetbrains.kotlin.jvm" version "1.1.1"
+    id "org.jetbrains.kotlin.jvm" version "1.1.2"
     id 'application'
     id 'idea'
 }
 
-def kotlinVersion = '1.1.1'
+def kotlinVersion = '1.1.2'
 
 repositories {
     jcenter()
@@ -13,9 +13,10 @@ repositories {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlinVersion"
-    compile 'org.jetbrains.ktor:ktor-netty:0.3.1'
+    compile 'org.jetbrains.ktor:ktor-netty:0.3.2'
     compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.8.8'
     compile 'com.steamstreet:krest:0.1.2'
+    compile 'org.jsoup:jsoup:1.10.2'
     compile 'org.slf4j:slf4j-simple:1.7.24'
     testCompile 'org.jetbrains.spek:spek-junit-platform-engine:1.1.0'
     testCompile 'org.junit.platform:junit-platform-runner:1.0.0-M3'

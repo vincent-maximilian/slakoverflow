@@ -5,9 +5,9 @@ import jmailen.java.urlEncode
 import org.slf4j.LoggerFactory
 import java.net.URI
 
-class ApiClient {
+class Client {
     companion object {
-        val logger = LoggerFactory.getLogger(ApiClient::class.java)
+        val logger = LoggerFactory.getLogger(Client::class.java)
     }
 
     fun siteInfo(): List<SiteInfo> {
@@ -32,6 +32,8 @@ class ApiClient {
         logger.info("answers: $u")
         return u.get().response<Answers>().body.items
     }
+
+    fun pageFor(questionId: Int) = QuestionPage(questionId)
 }
 
 class ApiCall(val path: String = "", site: String = ApiCall.STACKOVERFLOW_SITE) {

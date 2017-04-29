@@ -1,7 +1,7 @@
 package jmailen.slakoverflow
 
 import jmailen.slakoverflow.serialization.Json
-import jmailen.slakoverflow.stackoverflow.ApiClient
+import jmailen.slakoverflow.stackoverflow.Client
 import org.jetbrains.ktor.application.ApplicationCall
 import org.jetbrains.ktor.application.call
 import org.jetbrains.ktor.content.TextContent
@@ -33,10 +33,10 @@ fun main(args: Array<String>) {
     server.start(wait = true)
 }
 
-val bot = SlakOverflowBot(ApiClient())
+val bot = SlakOverflowBot(Client())
 
 suspend fun handleRoot(call: ApplicationCall) {
-    val siteInfo = ApiClient().siteInfo()
+    val siteInfo = Client().siteInfo()
     call.respond(jsonResponse(siteInfo))
 }
 

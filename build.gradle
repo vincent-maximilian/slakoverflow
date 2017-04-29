@@ -23,9 +23,11 @@ dependencies {
     testCompile 'org.amshove.kluent:kluent:1.19'
 }
 
-mainClassName = 'jmailen.slakoverflow.MainKt'
-
 kotlin.experimental.coroutines 'enable'
+
+([compileKotlin, compileTestKotlin]).each {
+    it.kotlinOptions.jvmTarget = '1.8'
+}
 
 test {
     testLogging {
@@ -33,3 +35,5 @@ test {
         stackTraceFilters 'entry_point'
     }
 }
+
+mainClassName = 'jmailen.slakoverflow.MainKt'

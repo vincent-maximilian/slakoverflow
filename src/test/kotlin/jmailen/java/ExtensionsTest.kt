@@ -4,6 +4,8 @@ import org.amshove.kluent.`should equal`
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
+import org.jetbrains.spek.data_driven.data
+import org.jetbrains.spek.data_driven.on
 import org.junit.platform.runner.JUnitPlatform
 import org.junit.runner.RunWith
 
@@ -12,18 +14,17 @@ class ExtensionsTest : Spek({
 
     describe("String limit") {
 
-        class tc(val label: String, val subject: String, val limit: Int, val expected: String)
+        on("limiting string '%s' to %s",
+                data("Hi!", 5, expected = "Hi!"),
+                data("Cool.", 5, expected = "Cool."),
+                data("A really long thing", 5, expected = "A rea..."),
+                data("Something", 0, "...")
+        ) { subject, limit, expected ->
 
-        arrayOf(tc(label = "keeps short strings",           subject = "Hi!",                 limit = 5, expected = "Hi!"),
-                tc(label = "keeps strings at the limit",    subject = "Cool.",               limit = 5, expected = "Cool."),
-                tc(label = "truncates long strings",        subject = "A really long thing", limit = 5, expected = "A rea..."),
-                tc(label = "truncates all with zero limit", subject = "Something",           limit = 0, expected = "...")
-        ).forEach { with(it) {
-
-            it(label) {
+            it("outputs '$expected'") {
                 subject.limit(limit) `should equal` expected
             }
-        }}
+        }
     }
 
     describe("String urlEncode") {

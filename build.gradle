@@ -19,6 +19,7 @@ dependencies {
     compile 'org.jsoup:jsoup:1.10.2'
     compile 'org.slf4j:slf4j-simple:1.7.24'
     testCompile 'org.jetbrains.spek:spek-junit-platform-engine:1.1.0'
+    testCompile 'org.jetbrains.spek:spek-data-driven-extension:1.1.0'
     testCompile 'org.junit.platform:junit-platform-runner:1.0.0-M3'
     testCompile 'org.amshove.kluent:kluent:1.19'
 }

@@ -15,17 +15,17 @@ class JsonTest : Spek({
 
     describe("json marshalling") {
         given("json data") {
-            val result = Json.write(TestJsonObject(true, 5.6f, "val", listOf("that")))
+            val result = Json.write(TestJsonObject(true, 5.6f, "val", listOf("that"))).toString()
 
             it("marshals it into json") {
-                result.toString() `should contain` """"someBool":true"""
-                result.toString() `should contain` """"someNum":5.6"""
-                result.toString() `should contain` """"someStr":"val""""
-                result.toString() `should contain` """"someArray":["that"]"""
+                result `should contain` """"someBool":true"""
+                result `should contain` """"someNum":5.6"""
+                result `should contain` """"someStr":"val""""
+                result `should contain` """"someArray":["that"]"""
             }
 
             it("skips null keys") {
-                result.toString() `should not contain` "someObj"
+                result `should not contain` "someObj"
             }
         }
     }

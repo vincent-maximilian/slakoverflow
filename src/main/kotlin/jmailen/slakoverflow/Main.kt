@@ -60,11 +60,11 @@ suspend fun handleCommandOverflow(call: ApplicationCall) {
     call.respond(jsonResponse(answer))
 }
 
-fun textResponse(text: String) = TextContent(text, ContentType.Application.Any)
+fun textResponse(text: String) = TextContent(text, ContentType.Text.Plain)
 
 fun jsonResponse(obj: Any): TextContent {
     val objSer = Json.write(obj)
-    return TextContent(objSer, ContentType.Text.Plain)
+    return TextContent(objSer, ContentType.Application.Json)
 }
 
 fun getPort(): Int {

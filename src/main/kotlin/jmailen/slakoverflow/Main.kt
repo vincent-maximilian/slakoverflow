@@ -15,11 +15,12 @@ import org.jetbrains.ktor.routing.routing
 import org.jetbrains.ktor.util.ValuesMap
 import org.slf4j.LoggerFactory
 
-const val PORT = 8777
+const val DEFAULT_PORT = 8777
 val logger = LoggerFactory.getLogger("slakoverflow")
 
 fun main(args: Array<String>) {
-    val server = embeddedServer(Netty, PORT) {
+    val port = getPort()
+    val server = embeddedServer(Netty, port) {
         routing {
             get("/") {
                 handleRoot(call)
@@ -29,7 +30,7 @@ fun main(args: Array<String>) {
             }
         }
     }
-    logger.info("starting slakoverflow:$PORT")
+    logger.info("starting slakoverflow:$port")
     server.start(wait = true)
 }
 
@@ -55,4 +56,8 @@ suspend fun handleCommandOverflow(call: ApplicationCall) {
 fun jsonResponse(obj: Any): TextContent {
     val objSer = Json.write(obj)
     return TextContent(objSer, ContentType.Application.Json)
+}
+
+fun getPort(): Int {
+    return System.getenv("PORT")?.toIntOrNull() ?: DEFAULT_PORT
 }

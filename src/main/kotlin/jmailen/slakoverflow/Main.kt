@@ -25,6 +25,9 @@ fun main(args: Array<String>) {
             get("/") {
                 handleRoot(call)
             }
+            get("/siteinfo") {
+                handleSiteInfo(call)
+            }
             post("/slack/command/overflow") {
                 handleCommandOverflow(call)
             }
@@ -37,6 +40,10 @@ fun main(args: Array<String>) {
 val bot = SlakOverflowBot(Client())
 
 suspend fun handleRoot(call: ApplicationCall) {
+    call.respond(textResponse("slakoverflow up\n"))
+}
+
+suspend fun handleSiteInfo(call: ApplicationCall) {
     val siteInfo = Client().siteInfo()
     call.respond(jsonResponse(siteInfo))
 }
@@ -53,9 +60,11 @@ suspend fun handleCommandOverflow(call: ApplicationCall) {
     call.respond(jsonResponse(answer))
 }
 
+fun textResponse(text: String) = TextContent(text, ContentType.Application.Any)
+
 fun jsonResponse(obj: Any): TextContent {
     val objSer = Json.write(obj)
-    return TextContent(objSer, ContentType.Application.Json)
+    return TextContent(objSer, ContentType.Text.Plain)
 }
 
 fun getPort(): Int {

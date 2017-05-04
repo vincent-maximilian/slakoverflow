@@ -2,10 +2,7 @@ package jmailen.slakoverflow.stackoverflow
 
 import org.jetbrains.spek.api.Spek
 import org.junit.Assert.assertEquals
-import org.junit.platform.runner.JUnitPlatform
-import org.junit.runner.RunWith
 
-@RunWith(JUnitPlatform::class)
 class ApiCallTest : Spek({
 
     test("root") {

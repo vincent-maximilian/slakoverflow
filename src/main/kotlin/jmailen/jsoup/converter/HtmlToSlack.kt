@@ -35,7 +35,7 @@ private fun convertLink(n: Node): String {
 }
 
 private fun convertPreformatted(n: Node): String {
-    return "\"\"\"\n${n.childNode(0).outerHtml()}\n\"\"\""
+    return "```\n${n.childNode(0).outerHtml()}\n```"
 }
 
 private fun convertText(t: TextNode) = t.text()

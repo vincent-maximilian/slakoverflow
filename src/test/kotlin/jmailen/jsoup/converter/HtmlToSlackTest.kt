@@ -36,10 +36,10 @@ class HtmlToSlackTest : Spek({
 
         xit("converts html with code blocks") {
             convertToSlack(codeBlock) `should equal` "Example\n\n" +
-                    "\"\"\"\n" +
+                    "```\n" +
                     " 10 print \"you are the <b>best</b>\"\n" +
                     " 20 goto 10\n" +
-                    "\"\"\"\n"
+                    "```\n"
         }
 
         xit("converts html with blockquotes") {

@@ -34,11 +34,15 @@ class HtmlToSlackTest : Spek({
             convertToSlack(withLinks) `should equal` "Go <http://over/here|here>\n"
         }
 
-        xit("converts html with code blocks") {
+        it("converts html with inline code") {
+            convertToSlack(inlineCode) `should equal` "`println(err.printStackTrace())` is great debugging for vi.\n"
+        }
+
+        it("converts html with code blocks") {
             convertToSlack(codeBlock) `should equal` "Example\n\n" +
-                    "```\n" +
-                    " 10 print \"you are the <b>best</b>\"\n" +
-                    " 20 goto 10\n" +
+                    "```\n\n" +
+                    "    10 print \"you are the <b>best</b>\"\n" +
+                    "    20 goto 10\n\n" +
                     "```\n"
         }
 
@@ -63,6 +67,8 @@ val formatting = """<div id="question" class="post-text">Some <b>stuff</b> and r
 val needsEscaping = """<div><span>this > that & one < two</span></div>"""
 
 val withLinks = """<div>Go <a href="http://over/here">here</a></div>"""
+
+val inlineCode = """<div><span><code>println(err.printStackTrace())</code> is great debugging for vi.</span></div>"""
 
 val codeBlock = """<div><p>Example<p><pre><code>
     10 print "you are the <b>best</b>"

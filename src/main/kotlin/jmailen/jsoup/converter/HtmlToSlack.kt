@@ -17,6 +17,7 @@ private fun convertNode(n: Node) = when {
     n is TextNode -> convertText(n)
     n.nodeName() == "a" -> convertLink(n)
     n.nodeName() == "pre" -> convertPreformatted(n)
+    n.nodeName() == "code" -> "`${convertParentNode(n)}`"
     n.nodeName() == "del" -> "~${convertParentNode(n)}~"
     n.nodeName() in boldTypes -> "*${convertParentNode(n)}*"
     n.nodeName() in italTypes -> "_${convertParentNode(n)}_"
@@ -35,7 +36,17 @@ private fun convertLink(n: Node): String {
 }
 
 private fun convertPreformatted(n: Node): String {
-    return "```\n${n.childNode(0).outerHtml()}\n```"
+    // handle special case of one <code> nested inside a <pre>
+    val content = if (n.childNodes().size == 1 && n.childNodes().first().nodeName() == "code") {
+        childHtmls(n.childNodes().first())
+    } else {
+        childHtmls(n)
+    }
+    return "```\n$content\n```"
+}
+
+private fun childHtmls(n: Node): String {
+    return n.childNodes().map { it.outerHtml() }.joinToString("")
 }
 
 private fun convertText(t: TextNode) = t.text()

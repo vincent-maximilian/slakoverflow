@@ -1,6 +1,7 @@
 package jmailen.slakoverflow
 
 import jmailen.java.limit
+import jmailen.jsoup.converter.convertToSlack
 import jmailen.slakoverflow.slack.CommandResponse
 import jmailen.slakoverflow.slack.ResponseType
 import jmailen.slakoverflow.stackoverflow.Answer
@@ -37,10 +38,12 @@ class SlakOverflowBot(val stackOverflow: Client) {
         val page = stackOverflow.pageFor(question.question_id)
 
         var text = "ok $user, found *<${page.url()}|${question.title}> (${question.score} votes)*:\n"
-        text += ">>>\n${page.questionPostHtml().limit(1000)}\n\n"
+        val questionSlackMk = convertToSlack(page.questionPostHtml())
+        text += ">>>\n${questionSlackMk.limit(1000)}\n\n"
 
         text += "*<${page.answerUrl(answer.answer_id)}|Answer> (${answer.score} votes):*\n"
-        text += "\n${page.answerPostHtml(answer.answer_id).limit(1000)}\n\n"
+        val answerSlackMk = convertToSlack(page.answerPostHtml(answer.answer_id))
+        text += "\n${answerSlackMk.limit(1000)}\n\n"
 
         return CommandResponse(text, ResponseType.in_channel)
     }

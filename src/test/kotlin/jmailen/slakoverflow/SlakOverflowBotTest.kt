@@ -70,7 +70,7 @@ class SlakOverflowBotTest : Spek({
             }
 
             it("renders the best question") {
-                result.text `should contain` "<b>Careless Whisper</b>"
+                result.text `should contain` "*Careless Whisper*"
             }
 
             it("includes a link to the best answer") {
@@ -78,7 +78,7 @@ class SlakOverflowBotTest : Spek({
             }
 
             it("renders the best answer") {
-                result.text `should contain` "<i>Forever in Love</i>"
+                result.text `should contain` "_Forever in Love_"
             }
 
             it("responds to the channel") {

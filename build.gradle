@@ -42,5 +42,5 @@ mainClassName = 'jmailen.slakoverflow.MainKt'
 build.dependsOn installDist
 
 task stage {
-    dependsOn build
+    dependsOn installDist
 }

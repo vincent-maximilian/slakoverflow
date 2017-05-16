@@ -3,7 +3,10 @@ package jmailen.slakoverflow
 import jmailen.java.limit
 import jmailen.slakoverflow.slack.CommandResponse
 import jmailen.slakoverflow.slack.ResponseType
-import jmailen.slakoverflow.stackoverflow.*
+import jmailen.slakoverflow.stackoverflow.Answer
+import jmailen.slakoverflow.stackoverflow.Client
+import jmailen.slakoverflow.stackoverflow.SearchResultExcerpt
+import jmailen.slakoverflow.stackoverflow.SearchResultType
 
 class SlakOverflowBot(val stackOverflow: Client) {
 

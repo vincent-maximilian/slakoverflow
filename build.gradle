@@ -4,13 +4,14 @@ buildscript {
     }
 }
 plugins {
-    id "org.jetbrains.kotlin.jvm" version "1.1.2"
+    id 'org.jetbrains.kotlin.jvm' version '1.1.2-2'
+    id 'org.jmailen.kotlinter' version '0.7.0'
     id 'application'
     id 'idea'
 }
 apply plugin: 'org.junit.platform.gradle.plugin'
 
-def kotlinVersion = '1.1.2'
+def kotlinVersion = '1.1.2-2'
 
 repositories {
     jcenter()

@@ -1,8 +1,18 @@
 package jmailen.slakoverflow
 
 import jmailen.slakoverflow.slack.ResponseType
-import jmailen.slakoverflow.stackoverflow.*
-import org.amshove.kluent.*
+import jmailen.slakoverflow.stackoverflow.Answer
+import jmailen.slakoverflow.stackoverflow.Client
+import jmailen.slakoverflow.stackoverflow.QuestionPage
+import jmailen.slakoverflow.stackoverflow.SearchResultExcerpt
+import jmailen.slakoverflow.stackoverflow.SearchResultType
+import org.amshove.kluent.When
+import org.amshove.kluent.`it returns`
+import org.amshove.kluent.`should contain`
+import org.amshove.kluent.`should equal`
+import org.amshove.kluent.any
+import org.amshove.kluent.calling
+import org.amshove.kluent.mock
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.given

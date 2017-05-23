@@ -3,26 +3,28 @@ package jmailen.slakoverflow
 import jmailen.jsoup.converter.convertToSlack
 import jmailen.slakoverflow.slack.CommandResponse
 import jmailen.slakoverflow.slack.ResponseType
+import jmailen.slakoverflow.slack.SlackClient
 import jmailen.slakoverflow.stackoverflow.Answer
-import jmailen.slakoverflow.stackoverflow.Client
+import jmailen.slakoverflow.stackoverflow.StackOverflowClient
 import jmailen.slakoverflow.stackoverflow.SearchResultExcerpt
 import jmailen.slakoverflow.stackoverflow.SearchResultType
 
-class SlakOverflowBot(val stackOverflow: Client) {
+class SlakOverflowBot(val stackOverflow: StackOverflowClient, val slack: SlackClient) {
 
-    fun answerQuestion(user: String, question: String): CommandResponse {
-        if (question.trim() != "") {
+    fun answerQuestion(user: String, question: String, responseUrl: String) {
+        val response = if (question.trim() != "") {
             val result = bestQuestion(question)
 
             if (result != null) {
                 val answer = bestAnswer(result.question_id)
-                return answerResponse(user, result, answer)
+                answerResponse(user, result, answer)
             } else {
-                return CommandResponse("ok $user, sorry no one has answered that question!", ResponseType.in_channel)
+                CommandResponse("ok $user, sorry no one has answered that question!", ResponseType.in_channel)
             }
         } else {
-            return CommandResponse("ok $user, did you have a question?", ResponseType.ephemeral)
+            CommandResponse("ok $user, did you have a question?", ResponseType.ephemeral)
         }
+        slack.respond(response, responseUrl)
     }
 
     private fun bestQuestion(query: String) =

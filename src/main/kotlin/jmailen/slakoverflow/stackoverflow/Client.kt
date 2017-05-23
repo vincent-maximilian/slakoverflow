@@ -5,9 +5,9 @@ import jmailen.java.urlEncode
 import org.slf4j.LoggerFactory
 import java.net.URI
 
-class Client {
+class StackOverflowClient {
     companion object {
-        val logger = LoggerFactory.getLogger(Client::class.java)
+        val logger = LoggerFactory.getLogger(StackOverflowClient::class.java)
     }
 
     fun siteInfo(): List<SiteInfo> {

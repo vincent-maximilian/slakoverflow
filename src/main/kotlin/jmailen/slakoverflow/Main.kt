@@ -17,11 +17,15 @@ import org.jetbrains.ktor.routing.routing
 import org.jetbrains.ktor.util.ValuesMap
 import org.slf4j.LoggerFactory
 
+const val ENV_PORT = "PORT"
+const val ENV_STACKAPPKEY = "STACKAPP_KEY"
+
 const val DEFAULT_PORT = 8777
 val logger = LoggerFactory.getLogger("slakoverflow")
 
 fun main(args: Array<String>) {
     val port = getPort()
+
     val server = embeddedServer(Netty, port) {
         routing {
             get("/") {
@@ -35,11 +39,16 @@ fun main(args: Array<String>) {
             }
         }
     }
+
     logger.info("starting slakoverflow:$port")
+    getStackAppKey()?.let { key ->
+        val maskedKey = key.replaceRange(0..key.lastIndex-4, "*".repeat(key.length-4))
+        logger.info("stack app key set: $maskedKey")
+    }
     server.start(wait = true)
 }
 
-val bot = SlakOverflowBot(StackOverflowClient(), SlackClient())
+val bot = SlakOverflowBot(StackOverflowClient(getStackAppKey()), SlackClient())
 
 suspend fun handleRoot(call: ApplicationCall) {
     call.respondText("slakoverflow up\n")
@@ -73,6 +82,6 @@ fun jsonResponse(obj: Any): TextContent {
     return TextContent(objSer, ContentType.Application.Json)
 }
 
-fun getPort(): Int {
-    return System.getenv("PORT")?.toIntOrNull() ?: DEFAULT_PORT
-}
+fun getPort() = System.getenv(ENV_PORT)?.toIntOrNull() ?: DEFAULT_PORT
+
+fun getStackAppKey() = System.getenv(ENV_STACKAPPKEY)

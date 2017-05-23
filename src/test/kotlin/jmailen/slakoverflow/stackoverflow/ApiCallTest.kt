@@ -26,6 +26,11 @@ class ApiCallTest : Spek({
         val call = ApiCall("/path", "a").withParam(""" n&m= """, """ultimate "funtime"?""")
         call `has uri ending in` "/path?site=a&+n%26m%3D+=ultimate+%22funtime%22%3F"
     }
+
+    test("api app key") {
+        val call = ApiCall("/path", stackAppKey = "mykey").withParam("p1", "v1")
+        call `has uri ending in` "/path?site=stackoverflow&key=mykey&p1=v1"
+    }
 })
 
 infix fun ApiCall.`has uri ending in`(end: String) =

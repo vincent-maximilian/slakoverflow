@@ -23,6 +23,7 @@ dependencies {
     compile 'org.jetbrains.ktor:ktor-netty:0.3.2'
     compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.8.8'
     compile 'com.steamstreet:krest:0.1.2'
+    compile 'com.github.kittinunf.fuel:fuel:1.7.0'
     compile 'org.jsoup:jsoup:1.10.2'
     compile 'org.slf4j:slf4j-simple:1.7.24'
     testCompile 'org.jetbrains.spek:spek-junit-platform-engine:1.1.1'
@@ -44,5 +45,3 @@ build.dependsOn installDist
 task stage {
     dependsOn installDist
 }
-
-

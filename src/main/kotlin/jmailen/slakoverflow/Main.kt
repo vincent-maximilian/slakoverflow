@@ -1,13 +1,17 @@
 package jmailen.slakoverflow
 
 import jmailen.slakoverflow.serialization.Json
+import jmailen.slakoverflow.slack.CommandResponse
+import jmailen.slakoverflow.slack.ResponseType
 import jmailen.slakoverflow.slack.SlackClient
 import jmailen.slakoverflow.stackoverflow.StackOverflowClient
 import org.jetbrains.ktor.application.ApplicationCall
 import org.jetbrains.ktor.application.call
+import org.jetbrains.ktor.content.HttpStatusCodeContent
 import org.jetbrains.ktor.content.TextContent
 import org.jetbrains.ktor.host.embeddedServer
 import org.jetbrains.ktor.http.ContentType
+import org.jetbrains.ktor.http.HttpStatusCode
 import org.jetbrains.ktor.netty.Netty
 import org.jetbrains.ktor.request.uri
 import org.jetbrains.ktor.response.respondText
@@ -56,7 +60,7 @@ suspend fun handleRoot(call: ApplicationCall) {
 
 suspend fun handleSiteInfo(call: ApplicationCall) {
     val siteInfo = StackOverflowClient().siteInfo()
-    call.respond(jsonResponse(siteInfo))
+    call.respondJson(siteInfo)
 }
 
 suspend fun handleCommandOverflow(call: ApplicationCall) {
@@ -68,18 +72,23 @@ suspend fun handleCommandOverflow(call: ApplicationCall) {
     logger.info("{} called by {}", call.request.uri, user)
 
     // acknowledge command
-    call.respondText("")
+    call.respondJson(CommandResponse("ok $user, searching for that...", ResponseType.in_channel))
 
     if (responseUrl != null) {
+        // delayed response
         bot.answerQuestion(user, query, responseUrl)
     } else {
         logger.error("no response_url provided for query")
     }
 }
 
-fun jsonResponse(obj: Any): TextContent {
+suspend fun ApplicationCall.respondOk() {
+    respond(HttpStatusCodeContent(HttpStatusCode.OK))
+}
+
+suspend fun ApplicationCall.respondJson(obj: Any) {
     val objSer = Json.write(obj)
-    return TextContent(objSer, ContentType.Application.Json)
+    respond(TextContent(objSer, ContentType.Application.Json))
 }
 
 fun getPort() = System.getenv(ENV_PORT)?.toIntOrNull() ?: DEFAULT_PORT

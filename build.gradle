@@ -4,14 +4,12 @@ buildscript {
     }
 }
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.1.2-2'
-    id 'org.jmailen.kotlinter' version '0.9.1'
+    id 'org.jetbrains.kotlin.jvm' version '1.1.3-2'
+    id 'org.jmailen.kotlinter' version '1.2.0'
     id 'application'
     id 'idea'
 }
 apply plugin: 'org.junit.platform.gradle.plugin'
-
-def kotlinVersion = '1.1.2-2'
 
 repositories {
     jcenter()
@@ -19,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlinVersion"
+    compile 'org.jetbrains.kotlin:kotlin-stdlib-jre8'
     compile 'org.jetbrains.ktor:ktor-netty:0.3.2'
     compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.8.8'
     compile 'com.steamstreet:krest:0.1.2'

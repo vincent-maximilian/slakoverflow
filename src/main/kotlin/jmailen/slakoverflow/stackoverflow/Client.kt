@@ -17,18 +17,20 @@ class StackOverflowClient(val stackAppKey: String? = null) {
     }
 
     fun excerptSearch(freeText: String): List<SearchResultExcerpt> {
-        val u = ApiCall("/search/excerpts", stackAppKey = stackAppKey)
-                .withParam("order", "desc")
-                .withParam("sort", "relevance")
-                .withParam("q", freeText).uri()
+        val u = ApiCall("/search/excerpts", stackAppKey = stackAppKey).apply {
+            params["order"] = "desc"
+            params["sort"] = "relevance"
+            params["q"] = freeText
+        }.uri()
         logger.info("excerptSearch: $u")
         return u.get().response<SearchResults>().body.items
     }
 
     fun answers(questionId: Int): List<Answer> {
-        val u = ApiCall("/questions/$questionId/answers", stackAppKey = stackAppKey)
-                .withParam("order", "desc")
-                .withParam("sort", "votes").uri()
+        val u = ApiCall("/questions/$questionId/answers", stackAppKey = stackAppKey).apply {
+            params["order"] = "desc"
+            params["sort"] = "votes"
+        }.uri()
         logger.info("answers: $u")
         return u.get().response<Answers>().body.items
     }
@@ -48,11 +50,6 @@ class ApiCall(val path: String = "", site: String = ApiCall.STACKOVERFLOW_SITE, 
     init {
         params.set("site", site)
         stackAppKey?.let { key -> params.set("key", key) }
-    }
-
-    fun withParam(name: String, value: String): ApiCall {
-        params.set(name, value)
-        return this
     }
 
     fun uri() = URI(API_ROOT + path + paramsString())

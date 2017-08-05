@@ -14,22 +14,28 @@ class ApiCallTest : Spek({
     }
 
     test("one param") {
-        ApiCall("/path").withParam("name", "value") `has uri ending in` "/path?site=stackoverflow&name=value"
+        ApiCall("/path").apply {
+            params["name"] = "value"
+        } `has uri ending in` "/path?site=stackoverflow&name=value"
     }
 
     test("multiple params") {
-        val call = ApiCall("/path", "a").withParam("p1", "v1").withParam("p2", "v2")
-        call `has uri ending in` "/path?site=a&p1=v1&p2=v2"
+        ApiCall("/path", "a").apply {
+            params["p1"] = "v1"
+            params["p2"] = "v2"
+        } `has uri ending in` "/path?site=a&p1=v1&p2=v2"
     }
 
     test("param url encoding") {
-        val call = ApiCall("/path", "a").withParam(""" n&m= """, """ultimate "funtime"?""")
-        call `has uri ending in` "/path?site=a&+n%26m%3D+=ultimate+%22funtime%22%3F"
+        ApiCall("/path", "a").apply {
+            params[""" n&m= """] = """ultimate "funtime"?"""
+        } `has uri ending in` "/path?site=a&+n%26m%3D+=ultimate+%22funtime%22%3F"
     }
 
     test("api app key") {
-        val call = ApiCall("/path", stackAppKey = "mykey").withParam("p1", "v1")
-        call `has uri ending in` "/path?site=stackoverflow&key=mykey&p1=v1"
+        ApiCall("/path", stackAppKey = "mykey").apply {
+            params["p1"] = "v1"
+        } `has uri ending in` "/path?site=stackoverflow&key=mykey&p1=v1"
     }
 })
 

@@ -47,11 +47,9 @@ class HtmlToSlackTest : Spek({
         }
 
         xit("converts html with blockquotes") {
-
         }
 
         xit("converts html with lists") {
-
         }
     }
 })

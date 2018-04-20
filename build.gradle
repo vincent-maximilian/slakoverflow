@@ -1,33 +1,31 @@
-buildscript {
-    dependencies {
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-M4'
-    }
-}
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.1.3-2'
-    id 'org.jmailen.kotlinter' version '1.2.1'
+    id 'org.jetbrains.kotlin.jvm' version '1.2.40'
+    id 'org.jmailen.kotlinter' version '1.11.1'
     id 'application'
     id 'idea'
 }
-apply plugin: 'org.junit.platform.gradle.plugin'
 
 repositories {
     jcenter()
     maven { url  "http://dl.bintray.com/kotlin/ktor" }
 }
 
+ext.ktorVersion = '0.9.1'
+
 dependencies {
-    compile 'org.jetbrains.kotlin:kotlin-stdlib-jre8'
-    compile 'org.jetbrains.ktor:ktor-netty:0.3.3'
+    compile 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    compile 'org.jetbrains.kotlin:kotlin-reflect'
+    compile "io.ktor:ktor-server-core:$ktorVersion"
+    compile "io.ktor:ktor-server-netty:$ktorVersion"
     compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.9.0'
     compile 'com.steamstreet:krest:0.1.2'
     compile 'com.github.kittinunf.fuel:fuel:1.7.0'
     compile 'org.jsoup:jsoup:1.10.2'
     compile 'org.slf4j:slf4j-simple:1.7.24'
-    testCompile 'org.jetbrains.spek:spek-junit-platform-engine:1.1.2'
-    testCompile 'org.jetbrains.spek:spek-data-driven-extension:1.1.2'
-    testCompile 'org.amshove.kluent:kluent:1.26'
-    testRuntime 'org.junit.platform:junit-platform-runner:1.0.0-M4'
+    testCompile 'org.jetbrains.spek:spek-junit-platform-engine:1.1.5'
+    testCompile 'org.jetbrains.spek:spek-data-driven-extension:1.1.5'
+    testCompile 'org.amshove.kluent:kluent:1.27'
+    testRuntime 'org.junit.platform:junit-platform-engine:1.1.0'
 }
 
 kotlin.experimental.coroutines 'enable'

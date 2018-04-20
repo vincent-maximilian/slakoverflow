@@ -1,24 +1,25 @@
 package jmailen.slakoverflow
 
+import io.ktor.application.ApplicationCall
+import io.ktor.application.call
+import io.ktor.content.HttpStatusCodeContent
+import io.ktor.content.TextContent
+import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
+import io.ktor.request.receiveParameters
+import io.ktor.request.uri
+import io.ktor.response.respond
+import io.ktor.response.respondText
+import io.ktor.routing.get
+import io.ktor.routing.post
+import io.ktor.routing.routing
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
 import jmailen.slakoverflow.serialization.Json
 import jmailen.slakoverflow.slack.CommandResponse
 import jmailen.slakoverflow.slack.ResponseType
 import jmailen.slakoverflow.slack.SlackClient
 import jmailen.slakoverflow.stackoverflow.StackOverflowClient
-import org.jetbrains.ktor.application.ApplicationCall
-import org.jetbrains.ktor.application.call
-import org.jetbrains.ktor.content.HttpStatusCodeContent
-import org.jetbrains.ktor.content.TextContent
-import org.jetbrains.ktor.host.embeddedServer
-import org.jetbrains.ktor.http.ContentType
-import org.jetbrains.ktor.http.HttpStatusCode
-import org.jetbrains.ktor.netty.Netty
-import org.jetbrains.ktor.request.uri
-import org.jetbrains.ktor.response.respondText
-import org.jetbrains.ktor.routing.get
-import org.jetbrains.ktor.routing.post
-import org.jetbrains.ktor.routing.routing
-import org.jetbrains.ktor.util.ValuesMap
 import org.slf4j.LoggerFactory
 
 const val ENV_PORT = "PORT"
@@ -46,7 +47,7 @@ fun main(args: Array<String>) {
 
     logger.info("starting slakoverflow:$port")
     getStackAppKey()?.let { key ->
-        val maskedKey = key.replaceRange(0..key.lastIndex-4, "*".repeat(key.length-4))
+        val maskedKey = key.replaceRange(0..key.lastIndex - 4, "*".repeat(key.length - 4))
         logger.info("stack app key set: $maskedKey")
     }
     server.start(wait = true)
@@ -64,7 +65,7 @@ suspend fun handleSiteInfo(call: ApplicationCall) {
 }
 
 suspend fun handleCommandOverflow(call: ApplicationCall) {
-    val form = call.request.receive(ValuesMap::class)
+    val form = call.receiveParameters()
     val user = form["user_name"] ?: "you"
     val query = form["text"] ?: ""
     val responseUrl = form["response_url"]

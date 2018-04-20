@@ -66,8 +66,13 @@ class JsonTest : Spek({
     }
 })
 
-data class TestJsonObject(val someBool: Boolean, val someNum: Float, val someStr: String,
-                          val someArray: List<String>, val someObj: TestNestedJsonObject? = null)
+data class TestJsonObject(
+    val someBool: Boolean,
+    val someNum: Float,
+    val someStr: String,
+    val someArray: List<String>,
+    val someObj: TestNestedJsonObject? = null
+)
 
 data class TestNestedJsonObject(val nested: String)
 

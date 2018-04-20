@@ -15,9 +15,9 @@ object Json {
 
     fun write(obj: Any) = mapper.writeValueAsString(obj)
 
-    inline fun <reified T: Any> read(src: ByteArray): T = mapper.readValue(src, T::class.java)
+    inline fun <reified T : Any> read(src: ByteArray): T = mapper.readValue(src, T::class.java)
 
-    inline fun <reified T: Any> readList(src: ByteArray): List<T> {
+    inline fun <reified T : Any> readList(src: ByteArray): List<T> {
         val type = mapper.typeFactory.constructParametricType(List::class.java, T::class.java)
         return mapper.readValue(src, type)
     }

@@ -40,4 +40,4 @@ class ApiCallTest : Spek({
 })
 
 infix fun ApiCall.`has uri ending in`(end: String) =
-        assertEquals(this.uri().toString(), ApiCall.API_ROOT + end)
+        assertEquals(this.url().toString(), ApiCall.API_ROOT + end)

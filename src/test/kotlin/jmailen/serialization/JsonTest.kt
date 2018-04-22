@@ -1,4 +1,4 @@
-package jmailen.slakoverflow.serialization
+package jmailen.serialization
 
 import org.amshove.kluent.`should contain`
 import org.amshove.kluent.`should equal`

@@ -15,11 +15,9 @@ ext.ktorVersion = '0.9.1'
 dependencies {
     compile 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
     compile 'org.jetbrains.kotlin:kotlin-reflect'
-    compile "io.ktor:ktor-server-core:$ktorVersion"
     compile "io.ktor:ktor-server-netty:$ktorVersion"
-    compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.9.0'
-    compile 'com.steamstreet:krest:0.1.2'
-    compile 'com.github.kittinunf.fuel:fuel:1.7.0'
+    compile "io.ktor:ktor-client-apache:$ktorVersion"
+    compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.9.5'
     compile 'org.jsoup:jsoup:1.10.2'
     compile 'org.slf4j:slf4j-simple:1.7.24'
     testCompile 'org.jetbrains.spek:spek-junit-platform-engine:1.1.5'

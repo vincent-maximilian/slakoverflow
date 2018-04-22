@@ -22,7 +22,7 @@ class SlackClient {
 
         when (response.status.value) {
             in 200..299 -> logger.info("sent response to: $toUrl")
-            in 300..599 -> logger.error("response to: $toUrl failed with ${response.status}")
+            in 300..599 -> logger.error("response to: ${response.call.request} failed with ${response.status}: ${String(response.receiveContent().inputStream().readAllBytes())}")
             else -> logger.warn("response to: $toUrl unexpected ${response.status}")
         }
     }

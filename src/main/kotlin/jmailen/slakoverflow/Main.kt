@@ -5,6 +5,7 @@ import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.content.HttpStatusCodeContent
 import io.ktor.content.TextContent
+import io.ktor.content.readText
 import io.ktor.features.StatusPages
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
@@ -19,13 +20,13 @@ import io.ktor.routing.post
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
+import io.ktor.util.toMap
 import jmailen.java.mask
 import jmailen.serialization.Json
 import jmailen.slakoverflow.slack.CommandResponse
 import jmailen.slakoverflow.slack.ResponseType
 import jmailen.slakoverflow.slack.SlackClient
 import jmailen.slakoverflow.stackoverflow.StackOverflowClient
-import java.rmi.UnexpectedException
 
 const val ENV_PORT = "PORT"
 const val ENV_STACKAPPKEY = "STACKAPP_KEY"
@@ -56,7 +57,10 @@ fun main(args: Array<String>) {
                 handleCommandOverflow(call)
             }
             get("/testError") {
-                throw UnexpectedException("we did actually expect that")
+                throw IllegalArgumentException(call.request.queryParameters["message"] ?: "some error occurred")
+            }
+            post("/sentry") {
+                handleSentry(call)
             }
         }
     }
@@ -96,6 +100,16 @@ suspend fun handleCommandOverflow(call: ApplicationCall) {
     } else {
         Logger.error("no response_url provided for query")
     }
+}
+
+suspend fun handleSentry(call: ApplicationCall) {
+    with (call.request) {
+        Logger.info("""sentry received:
+        |headers = {}
+        |body = {}
+        |""".trimMargin(), headers.toMap(), receiveContent().readText())
+    }
+    call.respondOk()
 }
 
 suspend fun ApplicationCall.respondOk() {

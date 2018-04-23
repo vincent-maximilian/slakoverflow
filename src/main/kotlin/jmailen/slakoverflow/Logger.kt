@@ -6,12 +6,14 @@ import org.slf4j.MDC
 import java.util.logging.LogManager
 
 object Logger {
+    const val ENV_RELEASE = "GIT_SHA"
+
     init {
         LogManager.getLogManager().readConfiguration(
             javaClass.getResourceAsStream("/logging.properties")
         )
         Sentry.init().apply {
-            release = System.getenv("SOURCE_VERSION") ?: "dev"
+            release = System.getenv(ENV_RELEASE) ?: "dev"
             mdcTags = setOf("path", "userAgent", "user")
         }
     }

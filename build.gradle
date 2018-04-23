@@ -1,6 +1,6 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.2.40'
-    id 'org.jmailen.kotlinter' version '1.11.1'
+    id 'org.jmailen.kotlinter' version '1.11.2'
     id 'application'
     id 'idea'
 }
@@ -19,7 +19,8 @@ dependencies {
     compile "io.ktor:ktor-client-apache:$ktorVersion"
     compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.9.5'
     compile 'org.jsoup:jsoup:1.10.2'
-    compile 'org.slf4j:slf4j-simple:1.7.24'
+    compile 'org.slf4j:slf4j-jdk14:1.7.24'
+    compile 'io.sentry:sentry:1.7.3'
     testCompile 'org.jetbrains.spek:spek-junit-platform-engine:1.1.5'
     testCompile 'org.jetbrains.spek:spek-data-driven-extension:1.1.5'
     testCompile 'org.amshove.kluent:kluent:1.27'

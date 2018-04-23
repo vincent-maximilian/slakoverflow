@@ -9,7 +9,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import jmailen.serialization.Json
-import jmailen.slakoverflow.logger
+import jmailen.slakoverflow.Logger
 import kotlinx.coroutines.experimental.runBlocking
 import java.util.zip.GZIPInputStream
 
@@ -36,7 +36,7 @@ object RestClient {
         with (call.response) {
             when (status.value) {
                 in 200..299 ->
-                    logger.debug("request successful to $url, received ${headers[HttpHeaders.ContentLength]}  bytes")
+                    Logger.debug("request successful to {}, received {} bytes", url, headers[HttpHeaders.ContentLength] ?: "0")
                 else ->
                     throw RuntimeException("unexpected response to $url: state = $status, message = ${String(receiveBytes())}")
             }

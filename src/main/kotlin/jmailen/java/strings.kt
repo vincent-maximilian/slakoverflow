@@ -9,4 +9,7 @@ fun String.limit(size: Int): String {
     }
 }
 
+fun String.mask(showLast: Int = 4) =
+    replaceRange(0..lastIndex - showLast, "*".repeat(length - showLast))
+
 fun String.urlEncode() = URLEncoder.encode(this, "UTF-8")

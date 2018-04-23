@@ -2,12 +2,16 @@ package jmailen.slakoverflow
 
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
+import io.ktor.application.install
 import io.ktor.content.HttpStatusCodeContent
 import io.ktor.content.TextContent
+import io.ktor.features.StatusPages
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
+import io.ktor.request.path
 import io.ktor.request.receiveParameters
 import io.ktor.request.uri
+import io.ktor.request.userAgent
 import io.ktor.response.respond
 import io.ktor.response.respondText
 import io.ktor.routing.get
@@ -15,23 +19,32 @@ import io.ktor.routing.post
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
+import jmailen.java.mask
 import jmailen.serialization.Json
 import jmailen.slakoverflow.slack.CommandResponse
 import jmailen.slakoverflow.slack.ResponseType
 import jmailen.slakoverflow.slack.SlackClient
 import jmailen.slakoverflow.stackoverflow.StackOverflowClient
-import org.slf4j.LoggerFactory
+import java.rmi.UnexpectedException
 
 const val ENV_PORT = "PORT"
 const val ENV_STACKAPPKEY = "STACKAPP_KEY"
-
+const val ENV_SENTRY_DSN = "SENTRY_DSN"
 const val DEFAULT_PORT = 8777
-val logger = LoggerFactory.getLogger("slakoverflow")
 
 fun main(args: Array<String>) {
     val port = getPort()
 
     val server = embeddedServer(Netty, port) {
+        install(StatusPages) {
+            exception<Throwable> { cause ->
+                Logger.error("request failed", cause, mapOf(
+                    "path" to call.request.path(),
+                    "userAgent" to (call.request.userAgent() ?: "unspecified")
+                ))
+                call.respond(HttpStatusCode.InternalServerError)
+            }
+        }
         routing {
             get("/") {
                 handleRoot(call)
@@ -42,14 +55,16 @@ fun main(args: Array<String>) {
             post("/slack/command/overflow") {
                 handleCommandOverflow(call)
             }
+            get("/testError") {
+                throw UnexpectedException("we did actually expect that")
+            }
         }
     }
 
-    logger.info("starting slakoverflow:$port")
-    getStackAppKey()?.let { key ->
-        val maskedKey = key.replaceRange(0..key.lastIndex - 4, "*".repeat(key.length - 4))
-        logger.info("stack app key set: $maskedKey")
-    }
+    Logger.info("starting slakoverflow:$port")
+
+    getStackAppKey()?.let { Logger.info("stack app key set: ${it.mask()}") }
+    getSentryDSN()?.let { Logger.info("sentry dsn ${it.mask()}") }
     server.start(wait = true)
 }
 
@@ -70,7 +85,7 @@ suspend fun handleCommandOverflow(call: ApplicationCall) {
     val query = form["text"] ?: ""
     val responseUrl = form["response_url"]
 
-    logger.info("{} called by {}", call.request.uri, user)
+    Logger.info("{} called by {}", call.request.uri, user)
 
     // acknowledge command
     call.respondJson(CommandResponse("ok $user, searching for that...", ResponseType.in_channel))
@@ -79,7 +94,7 @@ suspend fun handleCommandOverflow(call: ApplicationCall) {
         // delayed response
         bot.answerQuestion(user, query, responseUrl)
     } else {
-        logger.error("no response_url provided for query")
+        Logger.error("no response_url provided for query")
     }
 }
 
@@ -95,3 +110,5 @@ suspend fun ApplicationCall.respondJson(obj: Any) {
 fun getPort() = System.getenv(ENV_PORT)?.toIntOrNull() ?: DEFAULT_PORT
 
 fun getStackAppKey() = System.getenv(ENV_STACKAPPKEY)
+
+fun getSentryDSN() = System.getenv(ENV_SENTRY_DSN)

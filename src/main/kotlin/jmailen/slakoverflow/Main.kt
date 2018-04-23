@@ -27,6 +27,7 @@ import jmailen.slakoverflow.slack.CommandResponse
 import jmailen.slakoverflow.slack.ResponseType
 import jmailen.slakoverflow.slack.SlackClient
 import jmailen.slakoverflow.stackoverflow.StackOverflowClient
+import java.lang.IllegalStateException
 
 const val ENV_PORT = "PORT"
 const val ENV_STACKAPPKEY = "STACKAPP_KEY"
@@ -57,7 +58,7 @@ fun main(args: Array<String>) {
                 handleCommandOverflow(call)
             }
             get("/testError") {
-                throw IllegalArgumentException(call.request.queryParameters["message"] ?: "some error occurred")
+                throw IllegalStateException(call.request.queryParameters["message"] ?: "some error occurred")
             }
             post("/sentry") {
                 handleSentry(call)

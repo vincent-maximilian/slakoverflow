@@ -1,10 +1,10 @@
 package jmailen.slakoverflow.stackoverflow
 
+import java.net.URI
 import jmailen.http.RestClient
 import jmailen.java.urlEncode
-import org.slf4j.LoggerFactory
-import java.net.URI
 import kotlin.collections.set
+import org.slf4j.LoggerFactory
 
 class StackOverflowClient(val stackAppKey: String? = null) {
     companion object {

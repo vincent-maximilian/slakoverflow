@@ -5,9 +5,9 @@ import jmailen.slakoverflow.slack.CommandResponse
 import jmailen.slakoverflow.slack.ResponseType
 import jmailen.slakoverflow.slack.SlackClient
 import jmailen.slakoverflow.stackoverflow.Answer
-import jmailen.slakoverflow.stackoverflow.StackOverflowClient
 import jmailen.slakoverflow.stackoverflow.SearchResultExcerpt
 import jmailen.slakoverflow.stackoverflow.SearchResultType
+import jmailen.slakoverflow.stackoverflow.StackOverflowClient
 
 class SlakOverflowBot(val stackOverflow: StackOverflowClient, val slack: SlackClient) {
 

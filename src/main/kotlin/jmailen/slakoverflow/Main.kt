@@ -21,13 +21,13 @@ import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.util.toMap
+import java.lang.IllegalStateException
 import jmailen.java.mask
 import jmailen.serialization.Json
 import jmailen.slakoverflow.slack.CommandResponse
 import jmailen.slakoverflow.slack.ResponseType
 import jmailen.slakoverflow.slack.SlackClient
 import jmailen.slakoverflow.stackoverflow.StackOverflowClient
-import java.lang.IllegalStateException
 
 const val ENV_PORT = "PORT"
 const val ENV_STACKAPPKEY = "STACKAPP_KEY"
@@ -104,7 +104,7 @@ suspend fun handleCommandOverflow(call: ApplicationCall) {
 }
 
 suspend fun handleSentry(call: ApplicationCall) {
-    with (call.request) {
+    with(call.request) {
         Logger.info("""sentry received:
         |headers = {}
         |body = {}

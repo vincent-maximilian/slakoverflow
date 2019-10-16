@@ -1,9 +1,9 @@
 package jmailen.slakoverflow
 
 import io.sentry.Sentry
+import java.util.logging.LogManager
 import org.slf4j.LoggerFactory
 import org.slf4j.MDC
-import java.util.logging.LogManager
 
 object Logger {
     const val ENV_RELEASE = "GIT_SHA"

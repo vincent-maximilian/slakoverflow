@@ -8,10 +8,10 @@ import io.ktor.content.TextContent
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
+import java.util.zip.GZIPInputStream
 import jmailen.serialization.Json
 import jmailen.slakoverflow.Logger
 import kotlinx.coroutines.experimental.runBlocking
-import java.util.zip.GZIPInputStream
 
 /**
  * Simplistic synchronous rest client atop Ktor http client.
@@ -33,7 +33,7 @@ object RestClient {
             message?.let { body = TextContent(Json.write(message), ContentType.Application.Json) }
         }
 
-        with (call.response) {
+        with(call.response) {
             when (status.value) {
                 in 200..299 ->
                     Logger.debug("request successful to {}, received {} bytes", url, headers[HttpHeaders.ContentLength] ?: "0")
